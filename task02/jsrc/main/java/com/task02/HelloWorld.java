@@ -33,16 +33,20 @@ public class HelloWorld implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 
     private final Map<String, String> responseHeaders = Map.of("Content-Type", "application/json");
     private final ObjectMapper mapper = new ObjectMapper();
-    private final Map<RouteKey, Function<APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse>> routeHandlers = Map.of(
-            new RouteKey("GET", "/hello"), this::handleGetHello);
+
 
     @Override
     public APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent requestEvent, Context context) {
-        RouteKey routeKey = new RouteKey(getMethod(requestEvent), getPath(requestEvent));
-        return routeHandlers.getOrDefault(routeKey, this::notFoundResponse).apply(requestEvent);
+        String method = getMethod(requestEvent);
+        String path = getPath(requestEvent);
+
+        if (path.trim().equals("/hello") && method.trim().equals("GET")) {
+            return handleGetHello();
+        }
+        return notFoundResponse(requestEvent);
     }
 
-    private APIGatewayV2HTTPResponse handleGetHello(APIGatewayV2HTTPEvent requestEvent) {
+    private APIGatewayV2HTTPResponse handleGetHello() {
         try {
             return buildResponse(SC_OK, Body.ok("Hello from Lambda"));
         } catch (JsonProcessingException e) {
@@ -56,7 +60,7 @@ public class HelloWorld implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
                     String.format("Bad request syntax or unsupported method. Request path: %s. HTTP method: %s",
                             getPath(requestEvent),
                             getMethod(requestEvent)
-                            )));
+                    )));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
