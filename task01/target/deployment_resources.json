@@ -1,6 +1,6 @@
 {
-  "hello_world" : {
-    "name" : "hello_world",
+  "hello_world-test" : {
+    "name" : "hello_world-test",
     "lambda_path" : "C:\\Users\\Ruslan_Muhamadyarov\\ruslan\\github\\Demo_aws\\task01",
     "version" : "1.0.0",
     "func_name" : "com.task01.HelloWorld",
