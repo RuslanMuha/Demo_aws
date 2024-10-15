@@ -1,6 +1,8 @@
 package com.task02;
 
-public class Body {
+import java.io.Serializable;
+
+public class Body implements Serializable {
 
     private Integer statusCode;
     private String message;
@@ -18,5 +20,18 @@ public class Body {
         return new Body(400, message);
     }
 
+    public Integer getStatusCode() {
+        return statusCode;
+    }
 
+    public void setStatusCode(Integer statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
