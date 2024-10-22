@@ -13,7 +13,6 @@ import com.syndicate.deployment.model.lambda.url.AuthType;
 import com.syndicate.deployment.model.lambda.url.InvokeMode;
 
 import java.util.Map;
-import java.util.function.Function;
 
 @LambdaHandler(
         lambdaName = "hello_world",
