@@ -41,6 +41,6 @@ public class ApiHandler implements RequestHandler<EventRequestDto, SaveEventResp
 
 		eventRepository.saveEvent(event);
 		System.out.println("event: " +event);
-		return new SaveEventResponse(200, event);
+		return new SaveEventResponse(201, event);
 	}
 }
