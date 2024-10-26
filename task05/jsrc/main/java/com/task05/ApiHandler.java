@@ -92,7 +92,7 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 		System.out.println("item exists: "+b);
 
         try {
-            return buildResponse(201, new EventResponseDto(event));
+            return buildResponse(201, new SaveEventResponse(201, event));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
