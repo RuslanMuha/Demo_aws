@@ -9,17 +9,23 @@ public class DynamoDbClient {
 
 
     private final DynamoDBMapper mapper;
+    private final AmazonDynamoDB dynamoDB;
 
-    public DynamoDbClient() {
+    public DynamoDbClient(String region) {
         // Set your region
         AmazonDynamoDB dynamoDB = AmazonDynamoDBClientBuilder.standard()
-                .withRegion("eu-central-1") // Set your region
+                .withRegion(region) // Set your region
                 .build();
+        this.dynamoDB = dynamoDB;
         this.mapper = new DynamoDBMapper(dynamoDB);
     }
 
     public DynamoDBMapper getMapper() {
         return mapper;
+    }
+
+    public AmazonDynamoDB getDynamoDB() {
+        return dynamoDB;
     }
 
 }

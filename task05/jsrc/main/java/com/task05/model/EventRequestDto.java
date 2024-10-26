@@ -1,8 +1,10 @@
 package com.task05.model;
 
-public class EventRequestDto {
+import java.io.Serializable;
 
-    private int principalId;
+public class EventRequestDto  implements Serializable {
+
+    private Integer principalId;
     private Content content;
 
     // Getters and Setters

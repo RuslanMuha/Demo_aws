@@ -1,37 +1,33 @@
 package com.task05.model;
 
-import java.io.Serializable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedJson;
+
 import java.time.Instant;
 import java.util.UUID;
 
-
-public class Event implements Serializable {
+@DynamoDBTable(tableName = "cmtr-396a65b2-Events")
+public class EventEntity {
 
     private String id;
     private Integer principalId;
     private String createdAt;
+    @DynamoDBTypeConvertedJson
     private Content body;
 
-    public Event() {
+    public EventEntity() {
         this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now().toString();
     }
 
+    @DynamoDBHashKey(attributeName = "id")
     public String getId() {
         return id;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id='" + id + '\'' +
-                ", principalId=" + principalId +
-                ", createdAt='" + createdAt + '\'' +
-                ", body=" + body +
-                '}';
-    }
-
-    public Event(String id, int principalId, String createdAt, Content body) {
+    public EventEntity(String id, int principalId, String createdAt, Content body) {
         this.id = id;
         this.principalId = principalId;
         this.createdAt = createdAt;
@@ -42,6 +38,7 @@ public class Event implements Serializable {
         this.id = id;
     }
 
+    @DynamoDBAttribute(attributeName = "principalId")
     public int getPrincipalId() {
         return principalId;
     }
@@ -50,6 +47,7 @@ public class Event implements Serializable {
         this.principalId = principalId;
     }
 
+    @DynamoDBAttribute(attributeName = "createdAt")
     public String getCreatedAt() {
         return createdAt;
     }
@@ -58,6 +56,8 @@ public class Event implements Serializable {
         this.createdAt = createdAt;
     }
 
+    @DynamoDBAttribute(attributeName = "body")
+    @DynamoDBTypeConvertedJson
     public Content getBody() {
         return body;
     }

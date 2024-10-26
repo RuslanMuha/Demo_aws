@@ -20,7 +20,7 @@ Lambda feature overview.
 #### Environment variables
 * environment_variable_name: description
 
-#### Trigger event
+#### Trigger eventEntity
 ```buildoutcfg
 {
     "key": "value",

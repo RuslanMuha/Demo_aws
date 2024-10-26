@@ -1,10 +1,8 @@
 package com.task05.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import java.io.Serializable;
 
-@DynamoDBDocument
-public class Content {
+public class Content implements Serializable {
 
     private String name;
     private String surname;
@@ -12,12 +10,20 @@ public class Content {
     // Default constructor
     public Content() {}
 
+    @Override
+    public String toString() {
+        return "Content{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
+    }
+
     public Content(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
 
-    @DynamoDBAttribute(attributeName = "name")
+
     public String getName() {
         return name;
     }
@@ -26,7 +32,6 @@ public class Content {
         this.name = name;
     }
 
-    @DynamoDBAttribute(attributeName = "surname")
     public String getSurname() {
         return surname;
     }

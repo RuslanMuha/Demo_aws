@@ -3,16 +3,26 @@ package com.task05.model;
 public class EventResponseDto {
 
     private String id;
-    private int principalId;
+    private Integer principalId;
     private String createdAt;
     private Content body;
 
+    @Override
+    public String toString() {
+        return "EventResponseDto{" +
+                "id='" + id + '\'' +
+                ", principalId=" + principalId +
+                ", createdAt='" + createdAt + '\'' +
+                ", body=" + body +
+                '}';
+    }
+
     // Constructor to map Event to Response DTO
-    public EventResponseDto(Event event) {
-        this.id = event.getId();
-        this.principalId = event.getPrincipalId();
-        this.createdAt = event.getCreatedAt();
-        this.body = event.getBody();
+    public EventResponseDto(Event eventEntity) {
+        this.id = eventEntity.getId();
+        this.principalId = eventEntity.getPrincipalId();
+        this.createdAt = eventEntity.getCreatedAt();
+        this.body = eventEntity.getBody();
     }
 
     // Getters

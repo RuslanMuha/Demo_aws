@@ -2,7 +2,7 @@ package com.task05.service;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.task05.config.DynamoDbClient;
-import com.task05.model.Event;
+import com.task05.model.EventEntity;
 
 public class EventRepository {
 
@@ -12,12 +12,12 @@ public class EventRepository {
         this.mapper = dbClient.getMapper();
     }
 
-    public void saveEvent(Event event) {
-        mapper.save(event);
+    public void saveEvent(EventEntity eventEntity) {
+        mapper.save(eventEntity);
     }
 
-    public Event getEventById(String id) {
-        return mapper.load(Event.class, id);
+    public EventEntity getEventById(String id) {
+        return mapper.load(EventEntity.class, id);
     }
 
 }
