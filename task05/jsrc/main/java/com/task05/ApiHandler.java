@@ -1,7 +1,10 @@
 package com.task05;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.*;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
+import com.amazonaws.services.dynamodbv2.model.GetItemResult;
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
@@ -18,7 +21,6 @@ import com.syndicate.deployment.model.lambda.url.InvokeMode;
 import com.task05.config.DynamoDbClient;
 import com.task05.model.Event;
 import com.task05.model.EventRequestDto;
-import com.task05.model.EventResponseDto;
 import com.task05.model.SaveEventResponse;
 
 import java.util.HashMap;
