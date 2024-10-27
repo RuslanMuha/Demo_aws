@@ -44,7 +44,7 @@ public class EventResponseDto {
         this.id = eventEntity.getId();
         this.principalId = eventEntity.getPrincipalId();
         this.createdAt = eventEntity.getCreatedAt();
-        this.body = eventEntity.getContent();
+        this.body = eventEntity.getBody();
     }
 
     // Getters

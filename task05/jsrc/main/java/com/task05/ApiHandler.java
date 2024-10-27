@@ -68,17 +68,19 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 
 		Event event = new Event();
 		event.setPrincipalId(request.getPrincipalId());
-		event.setContent(request.getContent());
+		event.setBody(request.getContent());
 
 		Map<String, AttributeValue> item = new HashMap<>();
 		item.put("id", new AttributeValue(event.getId()));
 		item.put("principalId", new AttributeValue().withN(String.valueOf(event.getPrincipalId())));
 		item.put("createdAt", new AttributeValue(event.getCreatedAt()));
-        try {
-            item.put("body", new AttributeValue(objectMapper.writeValueAsString(event.getContent())));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+		// Convert body to a Map<String, AttributeValue> and store it
+		Map<String, AttributeValue> bodyMap = new HashMap<>();
+		for (Map.Entry<String, String> entry : event.getBody().entrySet()) {
+			bodyMap.put(entry.getKey(), new AttributeValue(entry.getValue()));
+		}
+		item.put("body", new AttributeValue().withM(bodyMap));
+
 
 		String targetTable = System.getenv("target_table");
 
