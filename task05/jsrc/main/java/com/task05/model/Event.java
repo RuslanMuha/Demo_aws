@@ -11,7 +11,7 @@ public class Event implements Serializable {
     private String id;
     private Integer principalId;
     private String createdAt;
-    private Map<String, String> content;
+    private Map<String, String> body;
 
     public Event() {
         this.id = UUID.randomUUID().toString();
@@ -28,19 +28,19 @@ public class Event implements Serializable {
                 "id='" + id + '\'' +
                 ", principalId=" + principalId +
                 ", createdAt='" + createdAt + '\'' +
-                ", body=" + content +
+                ", body=" + body +
                 '}';
     }
 
-    public Event(String id, int principalId, String createdAt, Map<String, String> content) {
+    public Event(String id, int principalId, String createdAt, Map<String, String> body) {
         this.id = id;
         this.principalId = principalId;
         this.createdAt = createdAt;
-        this.content = content;
+        this.body = body;
     }
 
-    public void setContent(Map<String, String> content) {
-        this.content = content;
+    public void setBody(Map<String, String> body) {
+        this.body = body;
     }
 
     public void setId(String id) {
@@ -55,8 +55,8 @@ public class Event implements Serializable {
         return principalId;
     }
 
-    public Map<String, String> getContent() {
-        return content;
+    public Map<String, String> getBody() {
+        return body;
     }
 
     public void setPrincipalId(int principalId) {
