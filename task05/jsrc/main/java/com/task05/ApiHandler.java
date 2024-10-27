@@ -66,14 +66,14 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 
 		Event event = new Event();
 		event.setPrincipalId(request.getPrincipalId());
-		event.setBody(request.getContent());
+		event.setContent(request.getContent());
 
 		Map<String, AttributeValue> item = new HashMap<>();
 		item.put("id", new AttributeValue(event.getId()));
 		item.put("principalId", new AttributeValue().withN(String.valueOf(event.getPrincipalId())));
 		item.put("createdAt", new AttributeValue(event.getCreatedAt()));
         try {
-            item.put("body", new AttributeValue(objectMapper.writeValueAsString(event.getBody())));
+            item.put("body", new AttributeValue(objectMapper.writeValueAsString(event.getContent())));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -110,6 +110,10 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 
 		// Step 3: Retrieve the item
 		GetItemResult result = dynamoDB.getItem(request);
+		result.getItem().forEach((k, v) -> {
+			System.out.println("key: " + k);
+			System.out.println("value: " +v);
+		});
 
 		// Step 4: Check if the item exists
 		return result.getItem() != null;

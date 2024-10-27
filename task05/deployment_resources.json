@@ -11,7 +11,8 @@
             "dynamodb:Query",
             "dynamodb:PutItem",
             "dynamodb:Batch*",
-            "dynamodb:DeleteItem"
+            "dynamodb:DeleteItem",
+            "dynamodb:CreateTable "
           ],
           "Effect": "Allow",
           "Resource": "*"

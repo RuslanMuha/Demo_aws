@@ -2,6 +2,7 @@ package com.task05.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -10,7 +11,7 @@ public class Event implements Serializable {
     private String id;
     private Integer principalId;
     private String createdAt;
-    private Content body;
+    private Map<String, String> content;
 
     public Event() {
         this.id = UUID.randomUUID().toString();
@@ -27,23 +28,35 @@ public class Event implements Serializable {
                 "id='" + id + '\'' +
                 ", principalId=" + principalId +
                 ", createdAt='" + createdAt + '\'' +
-                ", body=" + body +
+                ", body=" + content +
                 '}';
     }
 
-    public Event(String id, int principalId, String createdAt, Content body) {
+    public Event(String id, int principalId, String createdAt, Map<String, String> content) {
         this.id = id;
         this.principalId = principalId;
         this.createdAt = createdAt;
-        this.body = body;
+        this.content = content;
+    }
+
+    public void setContent(Map<String, String> content) {
+        this.content = content;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
+    public void setPrincipalId(Integer principalId) {
+        this.principalId = principalId;
+    }
+
     public int getPrincipalId() {
         return principalId;
+    }
+
+    public Map<String, String> getContent() {
+        return content;
     }
 
     public void setPrincipalId(int principalId) {
@@ -58,11 +71,5 @@ public class Event implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Content getBody() {
-        return body;
-    }
 
-    public void setBody(Content body) {
-        this.body = body;
-    }
 }

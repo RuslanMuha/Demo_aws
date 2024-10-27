@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Content implements Serializable {
 
-    private String name;
-    private String surname;
+    private String param1;
+    private String param2;
 
     // Default constructor
     public Content() {}
@@ -13,30 +13,30 @@ public class Content implements Serializable {
     @Override
     public String toString() {
         return "Content{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
+                "name='" + param1 + '\'' +
+                ", surname='" + param2 + '\'' +
                 '}';
     }
 
-    public Content(String name, String surname) {
-        this.name = name;
-        this.surname = surname;
+    public Content(String param1, String param2) {
+        this.param1 = param1;
+        this.param2 = param2;
     }
 
 
-    public String getName() {
-        return name;
+    public String getParam1() {
+        return param1;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setParam1(String param1) {
+        this.param1 = param1;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getParam2() {
+        return param2;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setParam2(String param2) {
+        this.param2 = param2;
     }
 }
