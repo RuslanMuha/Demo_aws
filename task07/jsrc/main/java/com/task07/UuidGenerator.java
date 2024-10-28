@@ -48,7 +48,7 @@ public class UuidGenerator implements RequestHandler<Object, Map<String, Object>
 		}
 
 		// Delete all files in the bucket
-		deleteAllFilesInBucket(bucketName);
+//		deleteAllFilesInBucket(bucketName);
 
 		// Generate file name and content
 		String fileName = Instant.now().toString(); // ISO 8601 format
