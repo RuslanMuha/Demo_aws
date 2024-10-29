@@ -133,8 +133,10 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Object> {
         Map<String, AttributeValue> bodyMap = new HashMap<>();
         for (Map.Entry<String, com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> entry : newImage.entrySet()) {
 
-            System.out.println("INSERT S: " + entry.getValue().toString());
-            bodyMap.put(entry.getKey(), new AttributeValue(entry.getValue().toString()));
+            String string = entry.getValue().toString();
+            int start = string.indexOf(":");
+            int end = string.indexOf(",");
+            bodyMap.put(entry.getKey(), new AttributeValue(string.substring(start + 1, end).trim()));
 
         }
         return bodyMap;
