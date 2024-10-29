@@ -136,7 +136,7 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Object> {
             String string = entry.getValue().toString();
             int start = string.indexOf(":");
             int end = string.indexOf(",");
-            bodyMap.put(entry.getKey(), new AttributeValue(string.substring(start + 1, end).trim()));
+            bodyMap.put(entry.getKey(), new AttributeValue().withN(string.substring(start + 1, end).trim()));
 
         }
         return bodyMap;
