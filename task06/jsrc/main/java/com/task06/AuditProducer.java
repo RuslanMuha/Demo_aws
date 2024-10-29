@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
+import com.amazonaws.util.NumberUtils;
 import com.syndicate.deployment.annotations.environment.EnvironmentVariable;
 import com.syndicate.deployment.annotations.environment.EnvironmentVariables;
 import com.syndicate.deployment.annotations.events.DynamoDbTriggerEventSource;
@@ -136,10 +137,19 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Object> {
             String string = entry.getValue().toString();
             int start = string.indexOf(":");
             int end = string.indexOf(",");
-            bodyMap.put(entry.getKey(), new AttributeValue().withN(string.substring(start + 1, end).trim()));
+            String value = string.substring(start + 1, end).trim();
+            if (isNumber(value)) {
+                bodyMap.put(entry.getKey(), new AttributeValue().withN(value));
+            } else {
+                bodyMap.put(entry.getKey(), new AttributeValue().withS(value));
+            }
 
         }
         return bodyMap;
+    }
+
+    private boolean isNumber(String value) {
+        return NumberUtils.tryParseInt(value) != null;
     }
 
 }
