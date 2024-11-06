@@ -84,8 +84,8 @@ public class Processor implements RequestHandler<Object, String> {
         // Add nested hourly data
         JsonNode hourlyNode = rootNode.path("hourly");
         forecast.put("hourly", new AttributeValue().withM(Map.of(
-                "temperature_2m", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("temperature_2m"), true)),
-                "time", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("time"), false))
+                "temperature_2m", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("temperature_2m"), false)),
+                "time", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("time"), true))
         )));
 
         // Add nested hourly_units data
