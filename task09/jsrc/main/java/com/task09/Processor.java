@@ -30,7 +30,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @LambdaHandler(
-        tracingMode = TracingMode.PassThrough,
+        tracingMode = TracingMode.Active,
         layers = "open_meteo_sdk_layer",
         lambdaName = "processor",
         roleName = "processor-role",
