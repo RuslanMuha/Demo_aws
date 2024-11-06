@@ -23,10 +23,7 @@ import com.syndicate.deployment.model.TracingMode;
 import com.syndicate.deployment.model.lambda.url.AuthType;
 import com.syndicate.deployment.model.lambda.url.InvokeMode;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @LambdaHandler(
@@ -87,8 +84,8 @@ public class Processor implements RequestHandler<Object, String> {
         // Add nested hourly data
         JsonNode hourlyNode = rootNode.path("hourly");
         forecast.put("hourly", new AttributeValue().withM(Map.of(
-                "temperature_2m", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("temperature_2m"))),
-                "time", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("time")))
+                "temperature_2m", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("temperature_2m"), true)),
+                "time", new AttributeValue().withL(convertToAttributeValueList(hourlyNode.path("time"), false))
         )));
 
         // Add nested hourly_units data
@@ -115,9 +112,17 @@ public class Processor implements RequestHandler<Object, String> {
 
     }
 
-    private List<AttributeValue> convertToAttributeValueList(JsonNode arrayNode) {
-        return arrayNode.findValuesAsText("").stream()
-                .map(AttributeValue::new)
-                .collect(Collectors.toList());
+    private List<AttributeValue> convertToAttributeValueList(JsonNode arrayNode, boolean isString) {
+        List<AttributeValue> attributeValues = new ArrayList<>();
+        if (arrayNode.isArray()) {
+            for (JsonNode element : arrayNode) {
+                if (isString) {
+                    attributeValues.add(new AttributeValue(element.asText()));
+                } else {
+                    attributeValues.add(new AttributeValue().withN(element.asText())); // For numeric values
+                }
+            }
+        }
+        return attributeValues;
     }
 }
