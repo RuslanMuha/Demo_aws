@@ -17,19 +17,24 @@ public class PostSignUpHandler extends CognitoSupport implements RequestHandler<
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent requestEvent, Context context) {
         try {
+            System.out.println("PostSignUpHandler: " + "start");
             SignUp signUp = SignUp.fromJson(requestEvent.getBody());
 
             String userId = cognitoSignUp(signUp)
                     .user().attributes().stream()
-                    .filter(attr -> attr.name().equals("sub"))
+                    .filter(attr -> attr.name().equals("email"))
                     .map(AttributeType::value)
                     .findAny()
                     .orElseThrow(() -> new RuntimeException("Sub not found."));
 
             System.out.println("userId: " + userId);
-
+            String idToken = confirmSignUp(signUp)
+                    .authenticationResult()
+                    .idToken();
+            System.out.println("idToken: " + idToken);
             return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(200);
+                    .withStatusCode(200)
+                    .withBody(String.format("{\"accessToken\": \"%s\"}", idToken));
         } catch (Exception e) {
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(400)

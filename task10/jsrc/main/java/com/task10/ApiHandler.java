@@ -2,7 +2,6 @@ package com.task10;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.model.Get;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -13,25 +12,26 @@ import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.syndicate.deployment.annotations.resources.DependsOn;
 import com.syndicate.deployment.model.ResourceType;
 import com.syndicate.deployment.model.RetentionSetting;
+import com.syndicate.deployment.model.environment.ValueTransformer;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 
-import java.util.HashMap;
 import java.util.Map;
-@DependsOn(resourceType = ResourceType.COGNITO_USER_POOL, name = "simple-booking-userpool")
+@DependsOn(resourceType = ResourceType.COGNITO_USER_POOL, name = "${booking_userpool}")
 @LambdaHandler(
-    lambdaName = "api_handler",
-	roleName = "api_handler-role",
-	isPublishVersion = true,
-	aliasName = "${lambdas_alias_name}",
-	logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
+		lambdaName = "api_handler",
+		roleName = "api_handler-role",
+		isPublishVersion = true,
+		aliasName = "${lambdas_alias_name}",
+		logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
 @EnvironmentVariables(value = {
 		@EnvironmentVariable(key = "region", value = "${region}"),
 		@EnvironmentVariable(key = "tables_table", value = "${tables_table}"),
 		@EnvironmentVariable(key = "reservations_table", value = "${reservations_table}"),
-		@EnvironmentVariable(key = "user_pool", value = "${booking_userpool}")
+		@EnvironmentVariable(key = "COGNITO_ID", value = "${booking_userpool}", valueTransformer = ValueTransformer.USER_POOL_NAME_TO_USER_POOL_ID),
+		@EnvironmentVariable(key = "CLIENT_ID", value = "${booking_userpool}", valueTransformer = ValueTransformer.USER_POOL_NAME_TO_CLIENT_ID),
 })
 public class ApiHandler implements  RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
@@ -66,8 +66,8 @@ public class ApiHandler implements  RequestHandler<APIGatewayProxyRequestEvent, 
 			return responseEvent;
 		}
 
-		return handler.handleRequest(requestEvent, context)
-				.withHeaders(headersForCORS);
+		return handler.handleRequest(requestEvent, context);
+//				.withHeaders(headersForCORS);
 	}
 
 	private Map<String, String> initHeadersForCORS() {
