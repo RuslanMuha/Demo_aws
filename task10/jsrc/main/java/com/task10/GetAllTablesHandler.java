@@ -55,7 +55,7 @@ public class GetAllTablesHandler implements RequestHandler<APIGatewayProxyReques
             // Extract the necessary fields for each reservation
             Map<String, Object> reservation = new HashMap<>();
             reservation.put("id", item.getInt("id"));
-            reservation.put("number", item.getInt("number"));
+            reservation.put("number", item.getInt("tableNumber"));
             reservation.put("places", item.getInt("places"));
             reservation.put("isVip", item.getBOOL("isVip"));
             if(item.hasAttribute("minOrder")){
