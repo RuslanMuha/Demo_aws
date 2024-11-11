@@ -137,7 +137,7 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
 
         // Define the filter expression to check for overlapping reservations
         String filterExpression = "#tableNumber = :tableNumber AND #date = :date AND " +
-                "((#slotTimeStart < :slotTimeEnd AND #slotTimeEnd > :slotTimeStart))";
+                "#slotTimeStart < :slotTimeEnd AND #slotTimeEnd > :slotTimeStart";
 
         // Build the scan request with a filter expression
         ScanRequest scanRequest = new ScanRequest()
