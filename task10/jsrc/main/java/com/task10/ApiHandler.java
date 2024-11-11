@@ -33,7 +33,7 @@ import java.util.Map;
 		@EnvironmentVariable(key = "COGNITO_ID", value = "${booking_userpool}", valueTransformer = ValueTransformer.USER_POOL_NAME_TO_USER_POOL_ID),
 		@EnvironmentVariable(key = "CLIENT_ID", value = "${booking_userpool}", valueTransformer = ValueTransformer.USER_POOL_NAME_TO_CLIENT_ID),
 })
-public class ApiHandler implements  RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
 	private final CognitoIdentityProviderClient cognitoClient;
 	private final Map<String, String> headersForCORS;
@@ -62,12 +62,11 @@ public class ApiHandler implements  RequestHandler<APIGatewayProxyRequestEvent, 
 		var handler = handlersByRouteKey.get(routeKey);
 		if (handler == null) {
 			responseEvent.setStatusCode(404);
-			responseEvent.setBody("Route not found");
+			responseEvent.setBody(String.format("Rout Not found %s", routeKey));
 			return responseEvent;
 		}
 
 		return handler.handleRequest(requestEvent, context);
-//				.withHeaders(headersForCORS);
 	}
 
 	private Map<String, String> initHeadersForCORS() {

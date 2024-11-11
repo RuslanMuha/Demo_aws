@@ -63,6 +63,6 @@ public class SignUp {
         String firstName = jsonNode.get("firstName").asText();
         String lastName = jsonNode.get("lastName").asText();
 
-        return new SignUp(email, password, firstName, lastName);
+        return new SignUp(firstName, lastName,email, password);
     }
 }

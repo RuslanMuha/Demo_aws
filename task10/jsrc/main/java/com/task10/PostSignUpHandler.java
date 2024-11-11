@@ -18,7 +18,10 @@ public class PostSignUpHandler extends CognitoSupport implements RequestHandler<
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent requestEvent, Context context) {
         try {
             System.out.println("PostSignUpHandler: " + "start");
+            System.out.println("body: " + requestEvent.getBody());
             SignUp signUp = SignUp.fromJson(requestEvent.getBody());
+            System.out.println("mail: " + signUp.getEmail());
+
 
             String userId = cognitoSignUp(signUp)
                     .user().attributes().stream()
