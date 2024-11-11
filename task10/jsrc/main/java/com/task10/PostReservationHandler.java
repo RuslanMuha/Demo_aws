@@ -45,7 +45,7 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
 
         int tableNumber = rootNode.get("tableNumber").asInt();
         boolean isTableExist = checkIfTableExistsByNumber(tableNumber);
-
+        System.out.println("isTableExist: " + isTableExist);
         if(!isTableExist) {
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(400);
@@ -55,6 +55,7 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
         String startReservation = rootNode.get("slotTimeStart").asText();
         String endReservation = rootNode.get("slotTimeEnd").asText();
         boolean isReservationConflict = checkReservationConflict(tableNumber, reservationDate, startReservation, endReservation);
+        System.out.println("isReservationConflict: " + isReservationConflict);
 
         if(isReservationConflict) {
             return new APIGatewayProxyResponseEvent()
@@ -120,27 +121,35 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
     }
 
     public boolean checkReservationConflict(int tableNumber, String date, String slotTimeStart, String slotTimeEnd) {
-        // Define the query parameters
+        // Define the filter expression to match the tableNumber, date, and overlapping time slots
+        Map<String, String> expressionAttributeNames = new HashMap<>();
+        expressionAttributeNames.put("#tableNumber", "tableNumber");
+        expressionAttributeNames.put("#date", "date");
+        expressionAttributeNames.put("#slotTimeStart", "slotTimeStart");
+        expressionAttributeNames.put("#slotTimeEnd", "slotTimeEnd");
+
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
         expressionAttributeValues.put(":tableNumber", new AttributeValue().withN(String.valueOf(tableNumber)));
         expressionAttributeValues.put(":date", new AttributeValue(date));
         expressionAttributeValues.put(":slotTimeStart", new AttributeValue(slotTimeStart));
         expressionAttributeValues.put(":slotTimeEnd", new AttributeValue(slotTimeEnd));
 
-        // Construct the filter expression for overlapping time slots on the same date
-        String filterExpression = "date = :date AND " +
-                "((slotTimeStart < :slotTimeEnd AND slotTimeEnd > :slotTimeStart))";
+        // Define the filter expression to check for overlapping reservations
+        String filterExpression = "#tableNumber = :tableNumber AND #date = :date AND " +
+                "((#slotTimeStart < :slotTimeEnd AND #slotTimeEnd > :slotTimeStart))";
 
+        // Build the scan request with a filter expression
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(System.getenv("reservations_table"))
                 .withFilterExpression(filterExpression)
+                .withExpressionAttributeNames(expressionAttributeNames)
                 .withExpressionAttributeValues(expressionAttributeValues)
-                .withLimit(1); // Only need to check if at least one item exists
+                .withLimit(1); // Only need to check if at least one conflict exists
 
-        // Execute the query
+        // Execute the scan
         ScanResult result = dynamoDB.scan(scanRequest);
 
-        // If any items are returned, a conflict exists
+        // Check if any items were returned, indicating a conflict
         return !result.getItems().isEmpty();
     }
 }
