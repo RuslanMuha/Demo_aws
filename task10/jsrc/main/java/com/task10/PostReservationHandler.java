@@ -46,7 +46,7 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
         int tableNumber = rootNode.get("tableNumber").asInt();
         boolean isTableExist = checkIfTableExistsByNumber(tableNumber);
         System.out.println("isTableExist: " + isTableExist);
-        if(!isTableExist) {
+        if (!isTableExist) {
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(400);
         }
@@ -57,7 +57,7 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
         boolean isReservationConflict = checkReservationConflict(tableNumber, reservationDate, startReservation, endReservation);
         System.out.println("isReservationConflict: " + isReservationConflict);
 
-        if(isReservationConflict) {
+        if (isReservationConflict) {
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(400);
         }
@@ -105,21 +105,20 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
         System.out.println("checkIfTableExistsByNumber: " + number);
 
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-        expressionAttributeValues.put(":tableNumber", new AttributeValue().withN(String.valueOf(number)));
+        expressionAttributeValues.put(":filterTableNumber", new AttributeValue().withN(String.valueOf(number)));
 
         // Build the scan request with a filter expression
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(System.getenv("tables_table"))
-                .withFilterExpression("#tableNumber = :tableNumber")
+                .withFilterExpression("#tableNumber = :filterTableNumber")
                 .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAttributeValues)
-                .withLimit(1); // Only need to check if at least one item exists
+                .withExpressionAttributeValues(expressionAttributeValues);
 
         // Execute the scan
         ScanResult result = dynamoDB.scan(scanRequest);
 
         // Check if any items were returned
-        return !result.getItems().isEmpty();
+        return result.getCount() > 0;
     }
 
     public boolean checkReservationConflict(int tableNumber, String date, String slotTimeStart, String slotTimeEnd) {
@@ -145,13 +144,12 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
                 .withTableName(System.getenv("reservations_table"))
                 .withFilterExpression(filterExpression)
                 .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAttributeValues)
-                .withLimit(1); // Only need to check if at least one conflict exists
+                .withExpressionAttributeValues(expressionAttributeValues);
 
         // Execute the scan
         ScanResult result = dynamoDB.scan(scanRequest);
 
         // Check if any items were returned, indicating a conflict
-        return !result.getItems().isEmpty();
+        return result.getCount() > 0;
     }
 }
