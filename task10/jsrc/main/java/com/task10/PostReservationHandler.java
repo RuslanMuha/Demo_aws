@@ -100,15 +100,17 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
     public boolean checkIfTableExistsByNumber(int number) {
         // Define the filter expression to match the number
         Map<String, String> expressionAttributeNames = new HashMap<>();
-        expressionAttributeNames.put("#number", "number");
+        expressionAttributeNames.put("#tableNumber", "tableNumber");
+
+        System.out.println("checkIfTableExistsByNumber: " + number);
 
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-        expressionAttributeValues.put(":number", new AttributeValue().withN(String.valueOf(number)));
+        expressionAttributeValues.put(":tableNumber", new AttributeValue().withN(String.valueOf(number)));
 
         // Build the scan request with a filter expression
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(System.getenv("tables_table"))
-                .withFilterExpression("#number = :number")
+                .withFilterExpression("#tableNumber = :tableNumber")
                 .withExpressionAttributeNames(expressionAttributeNames)
                 .withExpressionAttributeValues(expressionAttributeValues)
                 .withLimit(1); // Only need to check if at least one item exists

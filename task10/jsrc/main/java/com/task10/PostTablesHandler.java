@@ -45,11 +45,12 @@ public class PostTablesHandler implements RequestHandler<APIGatewayProxyRequestE
 
         // Create a map to store the item data for DynamoDB
         Map<String, AttributeValue> itemMap = new HashMap<>();
-
+        int tableNumber = rootNode.get("number").asInt();
+        System.out.println("created tableNumber: " + tableNumber);
         // Add required fields
         itemMap.put("email", new AttributeValue(email));
         itemMap.put("id", new AttributeValue().withN(String.valueOf(rootNode.get("id").asInt())));
-        itemMap.put("number", new AttributeValue().withN(String.valueOf(rootNode.get("number").asInt())));
+        itemMap.put("tableNumber", new AttributeValue().withN(String.valueOf(tableNumber)));
         itemMap.put("places", new AttributeValue().withN(String.valueOf(rootNode.get("places").asInt())));
         itemMap.put("isVip", new AttributeValue().withBOOL(rootNode.get("isVip").asBoolean()));
 

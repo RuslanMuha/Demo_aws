@@ -66,7 +66,7 @@ public class GetTablesHandler implements RequestHandler<APIGatewayProxyRequestEv
         // Create response map
         Map<String, Object> response = new HashMap<>();
         response.put("id", Integer.parseInt(item.get("id").getN()));
-        response.put("number", Integer.parseInt(item.get("number").getN()));
+        response.put("number", Integer.parseInt(item.get("tableNumber").getN()));
         response.put("places", Integer.parseInt(item.get("places").getN()));
         response.put("isVip", Boolean.parseBoolean(item.get("isVip").getBOOL().toString()));
 
