@@ -97,14 +97,18 @@ public class PostReservationHandler implements RequestHandler<APIGatewayProxyReq
     }
 
     public boolean checkIfTableExistsByNumber(int number) {
-        // Create a map to store the key condition for the query
+        // Define attribute names and values
+        Map<String, String> expressionAttributeNames = new HashMap<>();
+        expressionAttributeNames.put("#number", "number"); // Use placeholder for "number"
+
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
         expressionAttributeValues.put(":number", new AttributeValue().withN(String.valueOf(number)));
 
         // Build the query request
         QueryRequest queryRequest = new QueryRequest()
                 .withTableName(System.getenv("tables_table"))
-                .withKeyConditionExpression("number = :number")
+                .withKeyConditionExpression("#number = :number") // Use the placeholder here
+                .withExpressionAttributeNames(expressionAttributeNames)
                 .withExpressionAttributeValues(expressionAttributeValues)
                 .withLimit(1); // Only need to check if at least one item exists
 
