@@ -25,6 +25,9 @@ public class PostSignInHandler extends CognitoSupport implements RequestHandler<
                     .idToken();
 
             System.out.println("accessToken: " + accessToken);
+            System.out.println("email: " + signIn.getEmail());
+
+            tokenCache.putToken(signIn.getEmail(), accessToken);
 
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(200)

@@ -11,9 +11,11 @@ public class AuthHandler {
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
             return null;
         }
+        System.out.println("Bearer: "+ bearerToken);
 
-        String token = bearerToken.substring(bearerToken.indexOf("Bearer") + 1);
+        String token = bearerToken.replace("Bearer", "");
+        System.out.println("Token:"+ token);
 
-        return accessTokenCache.getEmail(token);
+        return accessTokenCache.getEmail(token.trim());
     }
 }

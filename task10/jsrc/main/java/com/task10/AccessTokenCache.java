@@ -12,7 +12,7 @@ public class AccessTokenCache {
       tokenMap.put(accessToken, email);
    }
 
-   public String getEmail( String accessToken) {
+   public String getEmail(String accessToken) {
       return tokenMap.get(accessToken);
    }
 

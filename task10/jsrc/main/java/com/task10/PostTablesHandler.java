@@ -28,6 +28,7 @@ public class PostTablesHandler implements RequestHandler<APIGatewayProxyRequestE
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent requestEvent, Context context) {
 
         String email = authHandler.getCurrentuser(requestEvent);
+        System.out.println("email: " + email);
         if (email == null) {
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(403);

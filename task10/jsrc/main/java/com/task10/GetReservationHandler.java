@@ -37,12 +37,6 @@ public class GetReservationHandler implements RequestHandler<APIGatewayProxyRequ
                     .withStatusCode(403);
         }
 
-        String tableId = requestEvent.getPathParameters().get("tableId");
-        if(tableId == null || tableId.isEmpty()) {
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(400);
-        }
-
         System.out.println("email: " + email);
 
         Map<String, Object> expressionAttributeValues = new HashMap<>();
