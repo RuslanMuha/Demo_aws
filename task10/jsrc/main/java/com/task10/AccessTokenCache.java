@@ -1,4 +1,4 @@
-package com.task11;
+package com.task10;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

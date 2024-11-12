@@ -1,4 +1,4 @@
-package com.task11;
+package com.task10;
 
 public class AccessToken {
     public AccessToken(String accessToken) {

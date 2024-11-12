@@ -1,4 +1,4 @@
-package com.task11;
+package com.task10;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -14,13 +14,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
 
-public class GetReservationHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    
+public class GetAllTablesHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+
     private final AuthHandler authHandler = new AuthHandler();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final AmazonDynamoDB dynamoDB;
 
-    public GetReservationHandler(AmazonDynamoDB dynamoDB) {
+    public GetAllTablesHandler(AmazonDynamoDB dynamoDB) {
         this.dynamoDB = dynamoDB;
     }
 
@@ -43,30 +43,31 @@ public class GetReservationHandler implements RequestHandler<APIGatewayProxyRequ
                 .withValueMap(expressionAttributeValues);
 
         // Use the Scan operation to fetch all reservations that match the email
-        Table reservationsTable = new DynamoDB(dynamoDB).getTable(System.getenv("reservations_table"));
+        Table reservationsTable = new DynamoDB(dynamoDB).getTable(System.getenv("tables_table"));
         Iterator<Item> itemsIterator = reservationsTable.scan(scanSpec).iterator();
 
         // Prepare the response
-        List<Map<String, Object>> reservationsList = new ArrayList<>();
+        List<Map<String, Object>> tableList = new ArrayList<>();
 
         while (itemsIterator.hasNext()) {
             Item item = itemsIterator.next();
 
             // Extract the necessary fields for each reservation
             Map<String, Object> reservation = new HashMap<>();
-            reservation.put("tableNumber", item.getInt("tableNumber"));
-            reservation.put("clientName", item.getString("clientName"));
-            reservation.put("phoneNumber", item.getString("phoneNumber"));
-            reservation.put("date", item.getString("date"));
-            reservation.put("slotTimeStart", item.getString("slotTimeStart"));
-            reservation.put("slotTimeEnd", item.getString("slotTimeEnd"));
+            reservation.put("id", item.getInt("id"));
+            reservation.put("number", item.getInt("tableNumber"));
+            reservation.put("places", item.getInt("places"));
+            reservation.put("isVip", item.getBOOL("isVip"));
+            if(item.hasAttribute("minOrder")){
+                reservation.put("minOrder", item.getInt("minOrder"));
+            }
 
-            reservationsList.add(reservation);
+            tableList.add(reservation);
         }
 
         // Construct the final response map
         Map<String, Object> response = new HashMap<>();
-        response.put("reservations", reservationsList);
+        response.put("tables", tableList);
 
         try {
             return new APIGatewayProxyResponseEvent()
