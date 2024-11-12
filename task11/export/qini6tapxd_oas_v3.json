@@ -1,0 +1,654 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "task11_api",
+    "version": "2024-11-12T15:33:17Z"
+  },
+  "servers": [
+    {
+      "url": "https://qini6tapxd.execute-api.eu-central-1.amazonaws.com/{basePath}",
+      "variables": {
+        "basePath": {
+          "default": "api"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "summary": "User registration",
+        "description": "Register a new user by providing a username, password, and email.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully registered"
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "201"
+            }
+          },
+          "passthroughBehavior": "when_no_templates",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/signin": {
+      "post": {
+        "summary": "User login",
+        "description": "Authenticate a user by providing a username and password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SigninRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_templates",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/reservations": {
+      "get": {
+        "summary": "Retrieve a list of reservations",
+        "description": "Fetch all reservations available in the system.",
+        "responses": {
+          "200": {
+            "description": "List of reservations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reservations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Reservation"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_templates",
+          "type": "aws_proxy"
+        }
+      },
+      "post": {
+        "summary": "Create a new reservation",
+        "description": "Submit a request to create a new reservation.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Reservation created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid reservation details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "201"
+            }
+          },
+          "passthroughBehavior": "when_no_templates",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/tables/{tableId}": {
+      "get": {
+        "summary": "Retrieve table information",
+        "description": "Fetch the details of a specific table using its ID.",
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Table details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TableResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Table not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_templates",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/tables": {
+      "get": {
+        "summary": "Retrieve all tables",
+        "description": "Returns a list of all tables with their details.",
+        "responses": {
+          "200": {
+            "description": "A list of tables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Table"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_templates",
+          "type": "aws_proxy"
+        }
+      },
+      "post": {
+        "summary": "Create a new table",
+        "description": "Adds a new table to the system with specified details.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TableRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Table created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TableCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload"
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "201"
+            }
+          },
+          "passthroughBehavior": "when_no_templates",
+          "type": "aws_proxy"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SignupRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "Unique first name for the user"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Unique lastName for the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for the user"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address of the user"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "password",
+          "email"
+        ]
+      },
+      "SigninRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "email of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for the user"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "JWT token for authenticated access"
+          }
+        },
+        "required": [
+          "token",
+          "userId"
+        ]
+      },
+      "ReservationRequest": {
+        "type": "object",
+        "properties": {
+          "tableNumber": {
+            "type": "integer",
+            "description": "Number of the table"
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Name of the client"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number of the client"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of the reservation in yyyy-MM-dd format"
+          },
+          "slotTimeStart": {
+            "type": "string",
+            "description": "Start time of the reservation slot",
+            "example": "13:00"
+          },
+          "slotTimeEnd": {
+            "type": "string",
+            "description": "End time of the reservation slot",
+            "example": "15:00"
+          }
+        },
+        "required": [
+          "tableNumber",
+          "clientName",
+          "phoneNumber",
+          "date",
+          "slotTimeStart",
+          "slotTimeEnd"
+        ]
+      },
+      "ReservationResponse": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the reservation"
+          }
+        },
+        "required": [
+          "reservationId"
+        ]
+      },
+      "Reservation": {
+        "type": "object",
+        "properties": {
+          "tableNumber": {
+            "type": "integer",
+            "description": "Number of the table"
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Name of the client"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number of the client"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of the reservation in yyyy-MM-dd format"
+          },
+          "slotTimeStart": {
+            "type": "string",
+            "description": "Start time of the reservation slot",
+            "example": "13:00"
+          },
+          "slotTimeEnd": {
+            "type": "string",
+            "description": "End time of the reservation slot",
+            "example": "15:00"
+          }
+        },
+        "required": [
+          "tableNumber",
+          "clientName",
+          "phoneNumber",
+          "date",
+          "slotTimeStart",
+          "slotTimeEnd"
+        ]
+      },
+      "TableResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the table"
+          },
+          "number": {
+            "type": "integer",
+            "description": "Number of the table"
+          },
+          "places": {
+            "type": "integer",
+            "description": "Number of people the table can accommodate"
+          },
+          "isVip": {
+            "type": "boolean",
+            "description": "Indicates if the table is in the VIP hall"
+          },
+          "minOrder": {
+            "type": "integer",
+            "description": "Table deposit required to book it",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "places",
+          "isVip"
+        ]
+      },
+      "TableRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the table"
+          },
+          "number": {
+            "type": "integer",
+            "description": "Number of the table"
+          },
+          "places": {
+            "type": "integer",
+            "description": "Number of people the table can accommodate"
+          },
+          "isVip": {
+            "type": "boolean",
+            "description": "Indicates if the table is in the VIP hall"
+          },
+          "minOrder": {
+            "type": "integer",
+            "description": "Table deposit required to book it",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "places",
+          "isVip"
+        ]
+      },
+      "TableCreateResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID of the created table"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "TablesResponse": {
+        "type": "object",
+        "properties": {
+          "tables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Table"
+            }
+          }
+        },
+        "required": [
+          "tables"
+        ]
+      },
+      "Table": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the table"
+          },
+          "number": {
+            "type": "integer",
+            "description": "Number of the table"
+          },
+          "places": {
+            "type": "integer",
+            "description": "Number of people the table can accommodate"
+          },
+          "isVip": {
+            "type": "boolean",
+            "description": "Indicates if the table is in the VIP hall"
+          },
+          "minOrder": {
+            "type": "integer",
+            "description": "Table deposit required to book it",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "places",
+          "isVip"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "string",
+            "description": "Error code for the issue encountered"
+          },
+          "message": {
+            "type": "string",
+            "description": "Detailed error message"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-amazon-apigateway-authtype": "cognito_user_pools",
+        "x-amazon-apigateway-authorizer": {
+          "x-syndicate-cognito-userpool-names": [
+            "${booking_userpool}"
+          ],
+          "type": "cognito_user_pools"
+        }
+      }
+    }
+  }
+}
